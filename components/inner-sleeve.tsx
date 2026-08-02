@@ -3,7 +3,7 @@ import Image from 'next/image';
 /**
  * Sleeve part 8: the inner sleeve, "Around the record".
  *
- * A gatefold montage, eleven frames, running edge to edge. This is the only
+ * A gatefold montage, thirteen frames, running edge to edge. This is the only
  * full-bleed block on the page and it is meant to break the 1160px column that
  * every other section sits in.
  *
@@ -31,7 +31,7 @@ import Image from 'next/image';
  *
  * Server component. No JS, no masonry library, no scroll snap, no observers.
  *
- * PERFORMANCE. Eleven images, all below the fold, none allowed to compete with
+ * PERFORMANCE. Thirteen images, all below the fold, none allowed to compete with
  * the hero for bandwidth. No `priority` and no `preload` here. `sizes` is set
  * from the real rendered column width at each breakpoint, so a tile that paints
  * 300px wide never requests a 1500px file. Every tile carries an explicit
@@ -52,10 +52,22 @@ interface Frame {
 }
 
 /**
- * Descriptions were written from the actual photographs. Not from filenames,
- * and explicitly not from the old design handoff's asset table, which described
- * several of these as objects and empty scenes ("guitar beside a lamp",
- * "weathered clapboard wall"). Every one of the eleven is a portrait of her.
+ * SELECTION RULE: one frame per SCENE, never per pose.
+ *
+ * The previous set had eleven frames of which five were "her at a microphone"
+ * (two on a porch, three in a studio). Individually they are different
+ * photographs; in a grid they read as duplicates, which is exactly what the
+ * client called out. Three were cut.
+ *
+ * The thirteen below are each a different place or activity: indoors with a
+ * lamp, porch steps, a chapel, a kitchen, walking a meadow, singing on a porch,
+ * a pickup tailgate, a wheat fence, a studio, standing in a meadow, sitting in
+ * a field, a fair at night, a clapboard wall. Before adding a frame, ask what
+ * scene it adds. If the answer is "another one of those", leave it out.
+ *
+ * Descriptions were written from the actual photographs, not from filenames and
+ * not from the old design handoff's asset table, which described several as
+ * objects and empty scenes. Every one is a portrait of her.
  */
 const FRAMES: Frame[] = [
   {
@@ -64,9 +76,14 @@ const FRAMES: Frame[] = [
     ratio: '4 / 5',
   },
   {
-    src: '/images/porch-mic-sunset.jpg',
-    alt: 'Goldie Boone singing into a microphone stand on a porch at sunset, wearing a long chambray skirt',
-    ratio: '9 / 16',
+    src: '/images/porch-guitar-goldenhour.jpg',
+    alt: 'Goldie Boone playing an acoustic guitar on a farmhouse porch, a wildflower field stretching out behind her at golden hour',
+    ratio: '16 / 9',
+  },
+  {
+    src: '/images/chapel-wildflowers.jpg',
+    alt: 'Goldie Boone sitting outside a white clapboard chapel with an arched window, wildflowers around her, in an open denim jacket',
+    ratio: '4 / 5',
   },
   {
     src: '/images/kitchen-coffee.jpg',
@@ -74,14 +91,14 @@ const FRAMES: Frame[] = [
     ratio: '4 / 5',
   },
   {
-    src: '/images/mic-porch.jpg',
-    alt: 'Goldie Boone singing into a vintage microphone on porch steps, in a white dress, straw hat and boots',
-    ratio: '3 / 4',
+    src: '/images/guitar-meadow-walk.jpg',
+    alt: 'Goldie Boone walking through a meadow of wildflowers carrying an acoustic guitar by the neck',
+    ratio: '4 / 5',
   },
   {
-    src: '/images/studio-headphones.jpg',
-    alt: 'Goldie Boone in a recording studio with headphones round her neck, a condenser microphone and guitars behind her',
-    ratio: '4 / 5',
+    src: '/images/porch-mic-sunset.jpg',
+    alt: 'Goldie Boone singing into a microphone stand on a porch at sunset, wearing a long chambray skirt',
+    ratio: '9 / 16',
   },
   {
     src: '/images/peach-truck.jpg',
@@ -89,14 +106,24 @@ const FRAMES: Frame[] = [
     ratio: '3 / 4',
   },
   {
+    src: '/images/fence-wheat-guitar.jpg',
+    alt: 'Goldie Boone leaning against a weathered timber fence in a wheat field at sunset, an acoustic guitar in her arms',
+    ratio: '16 / 9',
+  },
+  {
+    src: '/images/studio-headphones.jpg',
+    alt: 'Goldie Boone in a recording studio with headphones round her neck, a condenser microphone and guitars behind her',
+    ratio: '4 / 5',
+  },
+  {
     src: '/images/meadow-wildflowers.jpg',
     alt: 'Goldie Boone standing in a meadow of dry grass and wildflowers, one hand shading her eyes',
     ratio: '3 / 4',
   },
   {
-    src: '/images/studio-guitars.jpg',
-    alt: 'Goldie Boone singing at a condenser microphone indoors, acoustic guitars on the wall behind her',
-    ratio: '4 / 5',
+    src: '/images/field-guitar-hills.jpg',
+    alt: 'Goldie Boone sitting in a grass field with an acoustic guitar, low hills behind her',
+    ratio: '16 / 9',
   },
   {
     src: '/images/county-fair-dusk.jpg',
@@ -108,11 +135,6 @@ const FRAMES: Frame[] = [
     src: '/images/clapboard-wall.jpg',
     alt: 'Goldie Boone leaning against a weathered grey clapboard wall in a white eyelet dress',
     ratio: '3 / 4',
-  },
-  {
-    src: '/images/studio-cardigan.jpg',
-    alt: 'Goldie Boone at the microphone in a cream cardigan, warm window light across her',
-    ratio: '4 / 5',
   },
 ];
 

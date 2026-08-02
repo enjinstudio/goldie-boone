@@ -154,6 +154,43 @@ completely unrelated Drupal site already bound there. Same class as the
 port-3000 incident in vada-hollis. Check the port is free first, and verify what
 is actually served rather than trusting the server log.
 
+### 2026-08-02 — truncating filenames to build a contact sheet remapped the assets
+
+Curating the gallery meant previewing ~25 source images. The preview filenames
+were sanitised and cut to 30 characters, which made six different
+`ChatGPT Image Jun 12, 2026, 09_xx_xx AM.png` files collapse onto ONE preview
+name, each overwriting the last. The previews I then reviewed were therefore not
+the files I picked, and two wrong assets shipped: a fence portrait labelled as a
+chapel, and a **"Goldie Boone Music" branded banner graphic** placed in a
+photograph gallery.
+
+This is the same class as the handoff mislabelling its own assets, except
+self-inflicted. Two rules:
+
+1. When building a contact sheet, name previews by INDEX (`01.jpg`, `02.jpg`)
+   and print the index-to-source mapping. Never derive a preview name from a
+   truncated source name.
+2. Verify the file you PLACED, not the preview you reviewed. `sips` the file out
+   of `public/images/` and look at it.
+
+Also: promo graphics with the artist's wordmark on them are scattered through
+the same intake folder as the photographs. A gallery of "photos" must be checked
+for them; they are visually obvious but only if you actually look.
+
+### 2026-08-02 — renaming beats cache-busting when image CONTENTS change
+
+Replacing two images while keeping their paths meant the browser kept rendering
+the old frames even after `.next/cache` was cleared and the page was reloaded
+with a fresh query string. A byte comparison proved the server was serving the
+correct file the whole time (`disk=256299 served=256299`), so the disk and the
+server were never wrong; the browser was.
+
+Clearing `.next/cache` handles the optimizer. It does not handle the browser's
+own HTTP cache for `/_next/image?url=...`, which is keyed on that URL. **Rename
+the file** so the URL itself changes, then the cache is irrelevant. Ground truth
+is the file on disk plus a byte count against what the server returns, and the
+DOM's `currentSrc`. A screenshot is not evidence.
+
 ## Reference-site research, 2026-08-02
 
 Seven sites were source-inspected (raw CSS/JS, not rendered summaries). Full
