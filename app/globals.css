@@ -1,26 +1,261 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================================
+   GOLDIE BOONE - design tokens
+   A sun-faded 1970s country record sleeve. Warm wheat and cream grounds, a warm
+   brown-black ink, one gold accent, a faded-denim hover.
+
+   Colour values are carried over from the approved handoff, including its
+   measured contrast work. Two of these were specifically tuned to clear WCAG AA
+   and WILL fail if you change the background under them:
+     --gold-text (eyebrows)  5.50:1 on wheat, 5.96:1 on cream, 5.66:1 on hero mid
+     --ink-55    (labels)    5.68:1 / 6.16:1 / 5.85:1 on the same three
+   If you change a section ground, re-measure both. They already shipped broken
+   once. See brand/goldie.md in ~/socialmedia: wheat and faded pink are accent
+   and illustration colours, never text colours.
+
+   There is deliberately NO dark mode. Her palette is ivory, wheat and pale
+   denim, a daylight page, and brand/goldie.md calls that out as unusual and
+   worth keeping rather than overriding for convention.
+   ========================================================================== */
+
+@theme {
+  --color-cream: #f4ebda;
+  --color-cream-light: #f5ecdc;
+  --color-cream-mid: #f1e5ce;
+  --color-wheat-pale: #e9dabc;
+  --color-wheat: #efe2c6;
+  --color-wheat-warm: #e4cc99;
+  --color-wheat-deep: #c8b893;
+
+  --color-ink: #2a2721;
+  --color-ink-70: #4c463c;
+  --color-ink-55: #5c5648;
+  --color-ink-45: #5c564c;
+
+  --color-gold-text: #6b5620;
+  --color-gold-rule: #8a6a22;
+  --color-gold-bright: #e0b860;
+  --color-gold-footer: #e9c983;
+
+  --color-denim: #46586e;
+  --color-denim-dark: #374658;
+  --color-rose: #d6afa8;
+  --color-photo-bg: #dacdb2;
+  --color-footer-text: #efe7d6;
+  --color-footer-muted: #a79e8b;
+
+  --font-display: var(--font-display), Didot, 'Bodoni MT', Georgia, serif;
+  --font-body: var(--font-body), Georgia, serif;
+  --font-micro: var(--font-micro), system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* --- base ---------------------------------------------------------------- */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  /* The sticky header is 60px; anchored sections must not hide under it. */
+  scroll-padding-top: 60px;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  /* Never below 17px on mobile, per the accessibility floor. */
+  font-size: 1.125rem;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Focus is non-negotiable and appears on EVERY interactive element.
+   Do not remove this, and do not replace it with `outline: none`. */
+:focus-visible {
+  outline: 2px solid var(--color-gold-rule);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--color-wheat-warm);
+  color: var(--color-ink);
+}
+
+/* --- typography helpers -------------------------------------------------- */
+
+/* The uppercase micro-label. Utopia Orchestra's rule, which is a good one:
+   tracking scales with the font size. Never below 0.62rem. */
+.eyebrow {
+  font-family: var(--font-micro);
+  font-weight: 500;
+  font-size: 0.66rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-gold-text);
+}
+
+.micro {
+  font-family: var(--font-micro);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-ink-55);
+}
+
+/* Display type. opsz is already baked into the font file at 96, so this only
+   needs to handle tracking, which must tighten as size grows. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+}
+
+/* --- the sleeve: paper grain -------------------------------------------- */
+/*
+   One element, one rule, and it is what makes the whole page read as a printed
+   object rather than a web page. Inline SVG feTurbulence rather than a texture
+   JPEG: the reference site that inspired this ships a 105KB image for the same
+   effect, which would eat a quarter of the above-the-fold budget. This is
+   roughly 400 bytes and costs no network request.
+
+   `multiply` with light noise, NOT `screen`. Screen is for a dark-field film
+   scan where only light dust shows through (I checked the reference site's
+   actual texture file: it is exactly that). Our ground is cream, so we want
+   dark grain sitting into the paper.
+*/
+.grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.22;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* --- photography --------------------------------------------------------- */
+/*
+   Every photograph gets the same treatment so the whole page sits in one light.
+   NOTE the sepia value: the handoff specified up to 0.20, but brand/goldie.md
+   carries an explicit guard that her honey-blonde hair must never be pushed
+   toward copper or auburn (it sits in the image-generation negative prompt for
+   exactly this reason). Sepia at 0.20 does push it. We hold at 0.10 and let the
+   wheat multiply wash carry the warmth instead.
+*/
+.photo-treated {
+  filter: sepia(0.1) saturate(0.94);
+}
+
+.photo-wash::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-wheat-warm);
+  mix-blend-mode: multiply;
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+/* The arch: a half-round top, like a church window or a sleeve die-cut. */
+.arch {
+  border-radius: 999px 999px 4px 4px;
+}
+
+/* --- motion -------------------------------------------------------------- */
+/*
+   The motion budget is small and deliberate. Scroll reveals use CSS
+   scroll-driven animation, so there are no observers and no libraries. Browsers
+   without support show the final state, which means content NEVER depends on
+   motion having run.
+*/
+@keyframes gb-rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-rise] {
+      animation: gb-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 4% cover 26%;
+    }
+  }
+}
+
+@keyframes gb-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: gb-marquee 42s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  [data-rise] {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .marquee-track {
+    animation: none !important;
+  }
+}
+
+/* --- the inner sleeve mosaic --------------------------------------------- */
+/*
+   CSS multi-column, which is hole-free by construction. See the long note at
+   the top of components/inner-sleeve.tsx for why this is not a span grid: a
+   grid of varied spans cannot tile a rectangle, so it leaves ragged notches at
+   the block's edges, and against a solid ground those read as broken images
+   rather than as composition.
+
+   `break-inside: avoid` is the load-bearing declaration. Without it a frame can
+   be split across a column boundary, which is the one way this layout can go
+   wrong.
+*/
+.gb-mosaic {
+  column-count: 2;
+  column-gap: clamp(8px, 1.4vw, 18px);
+  padding-inline: clamp(8px, 1.4vw, 18px);
+}
+
+.gb-mosaic-item {
+  break-inside: avoid;
+  /* Multi-column has no row gap, so the vertical rhythm is a bottom margin.
+     It must match the column-gap or the grid reads as uneven. */
+  margin-block-end: clamp(8px, 1.4vw, 18px);
+}
+
+@media (min-width: 768px) {
+  .gb-mosaic {
+    column-count: 3;
+  }
+}
+
+@media (min-width: 1440px) {
+  /* Three columns on a very wide screen makes each frame absurdly tall. */
+  .gb-mosaic {
+    column-count: 4;
+  }
 }
