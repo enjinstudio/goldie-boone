@@ -2,8 +2,9 @@ import { goldie } from '@/content/artist';
 import { homegrown, wellWater } from '@/content/releases';
 import { toIsoDuration } from './duration';
 import type { Release } from '@/content/types';
+import { SITE_URL } from './site-url';
 
-const SITE = 'https://goldieboonemusic.com';
+const SITE = SITE_URL;
 
 /**
  * schema.org graph. Its job is entity consolidation: telling search engines

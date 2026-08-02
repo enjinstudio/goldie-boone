@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from 'next';
 import { fontVariables } from './fonts';
 import { buildSchema } from '@/lib/schema';
+import { SITE_URL } from '@/lib/site-url';
 
 import './globals.css';
 
-const SITE = 'https://goldieboonemusic.com';
+const SITE = SITE_URL;
 
 /**
  * Titles carry the artist name plus the current record, because the query these
