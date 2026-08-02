@@ -42,11 +42,10 @@ interface Frame {
   src: string;
   alt: string;
   /** Rendered aspect ratio of the tile, chosen per image. The mix of 3/4, 4/5
-   *  and 9/16 is what gives the columns their uneven rhythm. */
+   *  and 9/16 is what gives the columns their uneven rhythm, and with the
+   *  arches gone it is now the ONLY source of variety in this section, so do
+   *  not flatten these to a single value. */
   ratio: string;
-  /** Arch the top, matching the rest of the page. Used sparingly and only on
-   *  tall frames: a 999px dome on a squarish tile reads as a blob. */
-  arch?: boolean;
   /** Vertical crop anchor. Only set where the tile ratio differs meaningfully
    *  from the source ratio, so the crop would otherwise cut her head. */
   position?: string;
@@ -68,7 +67,6 @@ const FRAMES: Frame[] = [
     src: '/images/porch-mic-sunset.jpg',
     alt: 'Goldie Boone singing into a microphone stand on a porch at sunset, wearing a long chambray skirt',
     ratio: '9 / 16',
-    arch: true,
   },
   {
     src: '/images/kitchen-coffee.jpg',
@@ -79,7 +77,6 @@ const FRAMES: Frame[] = [
     src: '/images/mic-porch.jpg',
     alt: 'Goldie Boone singing into a vintage microphone on porch steps, in a white dress, straw hat and boots',
     ratio: '3 / 4',
-    arch: true,
   },
   {
     src: '/images/studio-headphones.jpg',
@@ -95,7 +92,6 @@ const FRAMES: Frame[] = [
     src: '/images/meadow-wildflowers.jpg',
     alt: 'Goldie Boone standing in a meadow of dry grass and wildflowers, one hand shading her eyes',
     ratio: '3 / 4',
-    arch: true,
   },
   {
     src: '/images/studio-guitars.jpg',
@@ -156,7 +152,7 @@ export default function InnerSleeve() {
               className="relative w-full overflow-hidden bg-photo-bg photo-wash"
               style={{
                 aspectRatio: frame.ratio,
-                borderRadius: frame.arch ? '999px 999px 3px 3px' : '3px',
+                borderRadius: '3px',
               }}
             >
               <Image
