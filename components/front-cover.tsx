@@ -257,16 +257,37 @@ export function FrontCover() {
               query. Two scales on purpose: below 900px the title owns the full
               width; above it the portrait sits alongside and the title shares.
 
-                stacked   needs    3.235em x 0.20vw = 0.647V
-                          available            V - 8vw padding = 0.92V
-                two-col   needs    3.235em x 0.14vw = 0.4529V
-                          available  0.92V - 0.368V portrait - 0.03V gap = 0.522V
+              WATER is the widest line. Its rendered width is measured, not
+              guessed: CoreText reports 3.3550em of natural advance in this
+              exact font file, and CSS letter-spacing applies to every one of
+              the five characters, so -0.03em pulls it to 3.2050em.
 
-              Both hold at every viewport, so there is no horizontal overflow at
-              any width, 390px included (252px of type in 359px of room). The
-              3.235em is measured, not guessed: CoreText reports WATER at
-              3.355em of advance in this exact font file, which -0.03em tracking
-              pulls in.
+                stacked   needs      3.205em x 0.20vw = 0.641V
+                          available              V - 8vw padding = 0.92V
+                two-col   needs      3.205em x 0.175vw = 0.561V
+                          available  0.92V - 0.313V portrait - 0.03V gap = 0.577V
+
+              Both hold, so there is no horizontal overflow at any width. Worked
+              at real viewports, title against available room:
+
+                390   250px in 350px      1136  637px in 656px
+                900   505px in 520px      1440  808px in 831px
+                1024  574px in 591px      1920  872px in 1116px
+
+              NOTE the margin. Stacked has 100px or more to spare, but the
+              two-column case runs at a constant 1.6% of the viewport, 14.7px at
+              900px. That is the cost of taking the title to 17.5vw against a
+              34% portrait, and it is real but it does hold. Do not raise either
+              number without re-running this: at 18.5vw they collide at 900px.
+
+              One consequence worth knowing: during the font swap the first
+              fallback, Didot, is 3.575em rendered, about 11% wider than Bodoni,
+              so between first paint and the font landing the last glyph of
+              WATER is clipped between 900 and 1554px. The section's
+              overflow-hidden contains it to a cosmetic clip rather than a
+              scrollbar, and Bodoni is 22KB and preloaded by next/font, so the
+              window is short. The proper fix is a size-adjust fallback in
+              app/fonts.ts, which is outside this file.
 
               letter-spacing and line-height are inline because .display is
               declared unlayered in globals.css and would otherwise win, and
@@ -375,14 +396,18 @@ export function FrontCover() {
             as a texture effect: the same frame appears twice, once whole and
             once cut into the type.
 
-            34% of the viewport. The agent that built this measured the
-            collision limit at 44%, so the width freed by coming down to 34% is
-            spent on the title (17.5vw rather than 14vw), which is what stops
-            the composition floating in the middle of a tall viewport. isolate confines the .photo-wash multiply blend to the
-            image instead of letting it reach the cream ground, and
-            overflow-hidden is what actually clips the photograph to the arch.
-            The photo-bg colour underneath means the arch is never a blank hole
-            while the image decodes. */}
+            34% of the content column, which is 31% of the viewport once the
+            page padding is taken off. The width freed by coming down from 40%
+            is spent on the title (17.5vw rather than 14vw), which is what stops
+            the composition floating in the middle of a tall viewport. The two
+            numbers are coupled: see the collision maths on the h1 above before
+            changing either, because the pair now runs at 1.6% clearance.
+
+            isolate confines the .photo-wash multiply blend to the image instead
+            of letting it reach the cream ground, and overflow-hidden is what
+            actually clips the photograph to the arch. The photo-bg colour
+            underneath means the arch is never a blank hole while the image
+            decodes. */}
         <div
           className="photo-wash arch relative isolate h-[clamp(18rem,44svh,26rem)] w-full shrink-0 overflow-hidden min-[900px]:h-[clamp(24rem,74svh,50rem)] min-[900px]:w-[34%]"
           style={{ background: 'var(--color-photo-bg)' }}
@@ -398,11 +423,19 @@ export function FrontCover() {
             preload
             fetchPriority="high"
             /* She sits high in a 1237x2200 portrait: crown at about 7%, eyeline
-               at 20%, neckline at 50%. In this arch the box is wider than the
-               source aspect, so cover crops the height and about 59% of the
-               frame survives; 12% places that band at 4.9% to 63.9%, which
-               keeps her whole head inside the arch, the eyeline a quarter of
-               the way down and the neckline near the base. */
+               at 20%, neckline at 50%, belt at 68%. The arch box is wider than
+               the source aspect either way, so cover crops the height and Y
+               chooses the band. Re-checked against the current 34% / 74svh box:
+
+                 desktop 1440x900  box 450x666, 83% of the frame survives,
+                                   band 2.0% to 85.1%. Crown lands 6% down the
+                                   arch, eyeline 22%, neckline 58%, belt 79%.
+                 phone   390x844   box 359x371, 58% survives, band 5.0% to
+                                   63.2%. Crown 3% down, eyeline 26%.
+
+               So the desktop arch is now close to a full-length portrait rather
+               than a head-and-shoulders crop, which is what the taller 74svh
+               box bought. Her whole head stays inside it at both sizes. */
             className="photo-treated object-cover object-[50%_12%]"
           />
         </div>
