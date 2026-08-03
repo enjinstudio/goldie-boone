@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { fontVariables } from './fonts';
 import { buildSchema } from '@/lib/schema';
 import { SITE_URL } from '@/lib/site-url';
@@ -6,6 +7,14 @@ import { SITE_URL } from '@/lib/site-url';
 import './globals.css';
 
 const SITE = SITE_URL;
+
+/**
+ * A GA4 measurement ID is public by design, since it ships in the page source
+ * on every request. So it is a constant here rather than an env var: reading it
+ * from the environment would buy no secrecy and would add a silent failure mode,
+ * where a build with the var unset drops analytics with no error.
+ */
+const GA_MEASUREMENT_ID = 'G-06ZKVE39GD';
 
 /**
  * Titles carry the artist name plus the current record, because the query these
@@ -103,6 +112,27 @@ export default function RootLayout({
           // Static, developer-authored JSON built from typed content in
           // content/. No user input reaches it, so there is nothing to sanitise.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(buildSchema()) }}
+        />
+        {/* Google Analytics 4.
+            `afterInteractive` deliberately, not `beforeInteractive`: this page
+            is measured on LCP and analytics must never sit in front of the
+            paint. It loads once the page is interactive, which is early enough
+            that no real session is missed. */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script
+          id="ga-init"
+          strategy="afterInteractive"
+          // Static, developer-authored config with no user input, matching the
+          // JSON-LD block above.
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');`,
+          }}
         />
       </body>
     </html>
