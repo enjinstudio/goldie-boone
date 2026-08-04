@@ -43,8 +43,20 @@ export interface Artist {
     youtube: string;
     tiktok: string;
   };
-  /** EU AI Act Art. 50. Disclosure is structural: it lives at the provenance
-   *  route, never as the words "AI" or "generated" in visible page copy. */
+  /**
+   * EU AI Act Art. 50. Disclosure now lives in TWO places, deliberately.
+   *
+   * `aiDisclosureShort` is one honest line rendered in the footer on every
+   * route, so the obligation is met whether or not anyone follows a link.
+   * `provenanceHref` points at the fuller account of how the songs get made.
+   *
+   * This supersedes the original rule that the words "AI" or "generated" must
+   * never appear in visible page copy. That rule assumed the provenance route
+   * carried the whole burden, and it left the site with a disclosure that only
+   * existed for readers who clicked. Vada's site has always worked this way.
+   * Changed 2026-08-04, see docs/superpowers/specs/2026-08-04-provenance-page-design.md.
+   */
+  aiDisclosureShort: string;
   provenanceHref: string;
   provenanceLabel: string;
 }

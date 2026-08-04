@@ -30,10 +30,18 @@ export const goldie: Artist = {
     tiktok: 'https://www.tiktok.com/@goldieboonemusic',
   },
   /**
-   * Structural disclosure. The label is worded exactly this way and must never
-   * be styled more quietly than the links beside it, per the handoff. The route
-   * itself is out of scope for v1; the link exists so the page has a home.
+   * Structural disclosure, in two parts.
+   *
+   * The line is deliberately NOT worded like Vada's. Hers is neutral and
+   * slightly formal, which suits her register; Goldie leads with warmth and
+   * establishes human authorship in the second sentence, before anyone clicks.
+   * Do not converge them: two artists, two voices.
+   *
+   * The label is worded exactly this way and must never be styled more quietly
+   * than the links beside it, per the handoff. The route now exists.
    */
+  aiDisclosureShort:
+    'Goldie is a country project brought to life with AI. The writing starts with people.',
   provenanceHref: '/how-these-songs-are-made',
   provenanceLabel: 'How these songs are made',
 };

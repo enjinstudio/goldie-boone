@@ -139,6 +139,19 @@ export default function SiteFooter() {
           ))}
         </nav>
 
+        {/* EU AI Act Art. 50 disclosure, on every route. It sits immediately
+            above the provenance link on purpose: the line states the fact, the
+            link offers the fuller account. It uses the SAME family, size and
+            colour as the links below it, because a disclosure styled more
+            quietly than its neighbours is the thing the rules exist to stop.
+            Do not shrink it, grey it, or move it below the colophon. */}
+        <p
+          className="text-footer-text"
+          style={{ ...MORE_LINK_TYPE, maxWidth: '46ch', lineHeight: 1.5 }}
+        >
+          {goldie.aiDisclosureShort}
+        </p>
+
         {/* Exactly two links. See the block comment above MORE_LINK_CLASS
             before touching either of them. */}
         <nav
