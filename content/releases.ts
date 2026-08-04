@@ -59,7 +59,11 @@ export const wellWater: Release = {
   spotifyAlbumId: null,
   appleMusicUrl: null,
   tracks: [],
-  trackCount: 11,
+  // 10, not 11. Corrected by Tolga 2026-08-04; this field and the project
+  // CLAUDE.md in ~/socialmedia both carried 11 and were both wrong. The number
+  // renders on the page AND shipped into launch-week captions, so it is
+  // load-bearing in two places at once.
+  trackCount: 10,
   isLead: true,
 };
 
