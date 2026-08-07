@@ -32,10 +32,25 @@ accessibility work are kept. Its layout is not. What was wrong with it:
 | 4 | **Spine** | `marquee.tsx` | ink |
 | 5 | **The record** | `the-record.tsx` | wheat |
 | 6 | **Lyric band** | `lyric-band.tsx` | full-bleed photo |
-| 7 | **Back cover** | `back-cover.tsx` | cream |
-| 8 | **Inner sleeve** | `inner-sleeve.tsx` | wheat |
-| 9 | About | `about.tsx` | cream |
-| 10 | Footer | `site-footer.tsx` | ink |
+| 7 | **Back cover**, Well Water tracklist | `tracklist-section.tsx` | cream |
+| 8 | **Back catalogue**, Homegrown tracklist | `tracklist-section.tsx` | ink |
+| 9 | **Inner sleeve** | `inner-sleeve.tsx` | wheat |
+| 10 | About | `about.tsx` | cream |
+| 11 | Footer | `site-footer.tsx` | ink |
+
+Sections 7 and 8 are the SAME component with different props: `variant`
+(`full` carries the cover art, a big title and labelled Side A / Side B;
+`compact` drops the art, shrinks the title and runs one unlabelled two-column
+list) and `ground` (which selects a colour theme, including the inverted
+cream-on-ink set). The back cover owns `#music`, because the header nav's
+"Music" link must land on the current record, not the back catalogue.
+
+Section 8 is ink rather than wheat only because section 9 is already wheat and
+no two adjacent sections may share a ground. Measured on the ink set: title and
+track titles 12.1:1, gold eyebrow 9.32:1, muted numerals and durations 5.59:1,
+every one past its WCAG AA floor. The compact list runs two columns from 850px
+up, not one: a single column measured 1191px tall against the full-weight
+section's 1126px, so the subordinate block was the taller of the two.
 
 ## Hard rules, never violate
 

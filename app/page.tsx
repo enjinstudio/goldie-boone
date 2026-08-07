@@ -4,7 +4,8 @@ import FrontCover from '@/components/front-cover';
 import Marquee from '@/components/marquee';
 import TheRecord from '@/components/the-record';
 import LyricBand from '@/components/lyric-band';
-import BackCover from '@/components/back-cover';
+import TracklistSection from '@/components/tracklist-section';
+import { homegrown, wellWater } from '@/content/releases';
 import InnerSleeve from '@/components/inner-sleeve';
 import About from '@/components/about';
 import SiteFooter from '@/components/site-footer';
@@ -37,8 +38,31 @@ export default function Home() {
         <TheRecord />
         {/* One emotional beat */}
         <LyricBand />
-        {/* Back cover: the tracklist */}
-        <BackCover />
+        {/* Back cover: the tracklist of the record this sleeve is FOR.
+            It owns #music, because the header nav's "Music" link should land
+            on the current album, not the back catalogue. */}
+        <TracklistSection
+          release={wellWater}
+          id="music"
+          slug="wellwater"
+          eyebrow="The record"
+          variant="full"
+          ground="cream"
+          blurb="Every title below opens that song on Spotify. They're listed in the order they sit on the record."
+        />
+        {/* The back catalogue, at deliberately lower weight: no cover art, one
+            column, smaller title. Ink rather than wheat because the inner
+            sleeve below is already wheat, and no two adjacent sections may
+            share a ground (DESIGN-SPEC, The Sleeve). */}
+        <TracklistSection
+          release={homegrown}
+          id="homegrown"
+          slug="homegrown"
+          eyebrow="Also out"
+          variant="compact"
+          ground="ink"
+          blurb="Her first record, still the one most people find her through."
+        />
         {/* Inner sleeve: the photo reel */}
         <InnerSleeve />
         <About />
