@@ -3,7 +3,7 @@ import Image from 'next/image';
 import ReactDOM from 'react-dom';
 
 import { goldie } from '@/content/artist';
-import { homegrown, wellWater } from '@/content/releases';
+import { wellWater } from '@/content/releases';
 import type { Release } from '@/content/types';
 import { formatReleaseDate, getReleaseState } from '@/lib/release-state';
 
@@ -157,22 +157,21 @@ export function FrontCover() {
     ? (NUMBER_WORDS[wellWater.trackCount] ?? String(wellWater.trackCount))
     : null;
 
-  /* Well Water has no store URLs yet, on purpose: content/releases.ts holds
-     appleMusicUrl and spotifyAlbumId at null until the record actually exists
-     on those services. So this section does NOT render Well Water store
-     buttons. A button that goes nowhere, or worse to a search page, is a dead
-     end on the single most important screen of the site.
+  /* Well Water is out and both store URLs exist, so the front cover now sends
+     people to the NEW record rather than to HOMEGROWN. This is the swap the
+     previous comment here described: during the countdown these two lines read
+     `homegrown`, because a button that goes nowhere (or worse, to a search
+     page) is a dead end on the most important screen of the site, and the
+     record she already had out was the honest thing to offer instead.
 
-     What it renders instead is the record she already has out. Someone who
-     arrives during the countdown can still hear her in one tap, which is the
-     whole job of a front cover. Apple Music leads and is the filled button
-     because it is the primary conversion target (build spec, Data section).
+     Apple Music leads and is the filled button because it is the primary
+     conversion target (build spec, Data section).
 
-     When the URLs are filled in, this section does not need editing: swap
-     `homegrown` for `wellWater` here and the guards below do the rest. */
-  const appleUrl = homegrown.appleMusicUrl;
-  const spotifyUrl = homegrown.spotifyAlbumId
-    ? `https://open.spotify.com/album/${homegrown.spotifyAlbumId}`
+     The guards below are unchanged and still do the work: each button renders
+     only if its OWN url is non-null, so this cannot ship a dead button. */
+  const appleUrl = wellWater.appleMusicUrl;
+  const spotifyUrl = wellWater.spotifyAlbumId
+    ? `https://open.spotify.com/album/${wellWater.spotifyAlbumId}`
     : null;
 
   const secondaryLinks = [
@@ -343,7 +342,7 @@ export function FrontCover() {
                 className="inline-flex min-h-[54px] items-center justify-center rounded-none bg-ink text-cream transition-colors duration-200 hover:bg-denim"
                 style={BUTTON_TYPE}
               >
-                Hear {inProse(homegrown.title)} on Apple Music
+                Hear {inProse(wellWater.title)} on Apple Music
               </a>
             ) : null}
 
@@ -355,7 +354,7 @@ export function FrontCover() {
                 /* Visible text is one word, so the accessible name spells out
                    what it opens. "Spotify" is contained in the label, which
                    keeps this inside WCAG 2.5.3 Label in Name. */
-                aria-label={`Hear ${inProse(homegrown.title)} on Spotify`}
+                aria-label={`Hear ${inProse(wellWater.title)} on Spotify`}
                 className="inline-flex min-h-[54px] items-center justify-center rounded-none border border-ink/60 text-ink transition-colors duration-200 hover:border-ink hover:bg-ink/10"
                 style={BUTTON_TYPE}
               >

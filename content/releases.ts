@@ -42,13 +42,17 @@ export const homegrown: Release = {
 };
 
 /**
- * Well Water is unreleased. There are no store URLs yet and the tracklist is
- * not public, so `tracks` is deliberately empty and both URLs are null.
+ * Well Water is OUT (2026-08-07). Store URLs and the tracklist landed on
+ * release day and are filled in below, so the release section renders store
+ * buttons rather than a countdown.
  *
- * Do NOT invent titles here. brand/goldie.md §8: never list a song that is not
- * in persona-catalog.md. The page renders a countdown while these are null and
- * swaps to store buttons once they are filled in. Fill both URLs, then set
- * `spotifyAlbumId`, and the release section changes with no other edits.
+ * Titles, Spotify IDs and durations were resolved live from the Spotify embed
+ * payload for album 3VxCBHRQlpdjQTFZibaT3S on 2026-08-07, the same way
+ * HOMEGROWN's were, and written into ~/socialmedia/tools/persona-catalog.md in
+ * the same pass. Nothing here was transcribed from a brief.
+ *
+ * Note the name collision: "Well Water" is BOTH this album and its track 1.
+ * Both are correct; do not "fix" one into the other.
  */
 export const wellWater: Release = {
   title: 'Well Water',
@@ -56,9 +60,23 @@ export const wellWater: Release = {
   releaseDate: '2026-08-07',
   coverArt: '/images/well-water-cover.jpg',
   coverAlt: 'Goldie Boone drawing water from a hand pump on a frosted morning',
-  spotifyAlbumId: null,
-  appleMusicUrl: null,
-  tracks: [],
+  spotifyAlbumId: '3VxCBHRQlpdjQTFZibaT3S',
+  // Storefront-NEUTRAL, per the Release type. Tolga supplied this as a /us/
+  // link; that form pins every visitor to the US store, so the storefront
+  // segment is stripped and Apple redirects each visitor to their own region.
+  appleMusicUrl: 'https://music.apple.com/album/well-water/6790127714',
+  tracks: [
+    { title: 'WELL WATER', durationMs: 198880, spotifyTrackId: '1pVhu7sCK7FjRzDFWlqfnh' },
+    { title: 'HAT IN HIS HANDS', durationMs: 212400, spotifyTrackId: '1UnlGN16Egh9mYwygTAgPs' },
+    { title: 'CAST IRON', durationMs: 207600, spotifyTrackId: '2U7IV5eSMuzQgkfZbA7dKN' },
+    { title: 'HER HANDWRITING', durationMs: 209400, spotifyTrackId: '0T4HOCHiaxVpbCRjWGSyMa' },
+    { title: 'SKITTISH', durationMs: 199080, spotifyTrackId: '4n6m6c9l1jOzWH4wX2DQGZ' },
+    { title: 'BLESS HER HEART', durationMs: 174800, spotifyTrackId: '14WHz7qdYJQvdthyK2bLlv' },
+    { title: 'GOD AND THE GARDEN', durationMs: 208560, spotifyTrackId: '3BRrCQAF2zqScxGGjKlvOs' },
+    { title: 'BAREFOOT RICH', durationMs: 177360, spotifyTrackId: '3RpliBJ6nmHfyZRbV6haY2' },
+    { title: 'RAIN ON TIN', durationMs: 214280, spotifyTrackId: '3Dg3PzfA5bwGX3vsJP7MKI' },
+    { title: 'PORCH LIGHT ON', durationMs: 188400, spotifyTrackId: '5jE1hF4bsMQW0U7Sz2NQcd' },
+  ],
   // 10, not 11. Corrected by Tolga 2026-08-04; this field and the project
   // CLAUDE.md in ~/socialmedia both carried 11 and were both wrong. The number
   // renders on the page AND shipped into launch-week captions, so it is
